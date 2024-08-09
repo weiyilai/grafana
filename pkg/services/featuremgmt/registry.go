@@ -144,8 +144,9 @@ var (
 		{
 			Name:         "autoMigrateXYChartPanel",
 			Description:  "Migrate old XYChart panel to new XYChart2 model",
-			Stage:        FeatureStagePublicPreview,
+			Stage:        FeatureStageGeneralAvailability,
 			FrontendOnly: true,
+			Expression:   "true", // enabled by default
 			Owner:        grafanaDatavizSquad,
 		},
 		{
@@ -693,9 +694,10 @@ var (
 		{
 			Name:         "formatString",
 			Description:  "Enable format string transformer",
-			Stage:        FeatureStagePublicPreview,
+			Stage:        FeatureStageGeneralAvailability,
 			FrontendOnly: true,
 			Owner:        grafanaDatavizSquad,
+			Expression:   "true", // enabled by default
 		},
 		{
 			Name:         "transformationsVariableSupport",
@@ -786,14 +788,6 @@ var (
 			Owner:        identityAccessTeam,
 		},
 		{
-			Name:         "awsDatasourcesNewFormStyling",
-			Description:  "Applies new form styling for configuration and query editors in AWS plugins",
-			Stage:        FeatureStageGeneralAvailability,
-			Expression:   "true",
-			FrontendOnly: true,
-			Owner:        awsDatasourcesSquad,
-		},
-		{
 			Name:         "cachingOptimizeSerializationMemoryUsage",
 			Description:  "If enabled, the caching backend gradually serializes query responses for the cache, comparing against the configured `[caching]max_value_mb` value as it goes. This can can help prevent Grafana from running out of memory while attempting to cache very large query responses.",
 			Stage:        FeatureStageExperimental,
@@ -832,9 +826,10 @@ var (
 		{
 			Name:         "addFieldFromCalculationStatFunctions",
 			Description:  "Add cumulative and window functions to the add field from calculation transformation",
-			Stage:        FeatureStagePublicPreview,
+			Stage:        FeatureStageGeneralAvailability,
 			FrontendOnly: true,
 			Owner:        grafanaDatavizSquad,
+			Expression:   "true", // enabled by default
 		},
 		{
 			Name:        "alertmanagerRemoteSecondary",
@@ -930,13 +925,6 @@ var (
 			Owner:        grafanaObservabilityLogsSquad,
 		},
 		{
-			Name:         "flameGraphItemCollapsing",
-			Description:  "Allow collapsing of flame graph items",
-			Stage:        FeatureStageExperimental,
-			FrontendOnly: true,
-			Owner:        grafanaObservabilityTracesAndProfilingSquad,
-		},
-		{
 			Name:         "exploreMetrics",
 			Description:  "Enables the new Explore Metrics core app",
 			Stage:        FeatureStageGeneralAvailability,
@@ -982,7 +970,7 @@ var (
 			Owner:        grafanaDatavizSquad,
 		},
 		{
-			// this is mainly used a a way to quickly disable query hints as a safe guard for our infrastructure
+			// this is mainly used as a way to quickly disable query hints as a safeguard for our infrastructure
 			Name:           "lokiQueryHints",
 			Description:    "Enables query hints for Loki",
 			Stage:          FeatureStageGeneralAvailability,
@@ -1001,12 +989,14 @@ var (
 			HideFromAdminPage: true,
 		},
 		{
-			Name:            "cloudRBACRoles",
-			Description:     "Enabled grafana cloud specific RBAC roles",
-			Stage:           FeatureStageExperimental,
-			Owner:           identityAccessTeam,
-			HideFromDocs:    true,
-			RequiresRestart: true,
+			Name:              "cloudRBACRoles",
+			Description:       "Enabled grafana cloud specific RBAC roles",
+			Stage:             FeatureStagePublicPreview,
+			Owner:             identityAccessTeam,
+			HideFromDocs:      true,
+			AllowSelfServe:    true,
+			HideFromAdminPage: true,
+			RequiresRestart:   true,
 		},
 		{
 			Name:           "alertingQueryOptimization",
@@ -1036,9 +1026,10 @@ var (
 		},
 		{
 			Name:        "onPremToCloudMigrations",
-			Description: "In-development feature that will allow users to easily migrate their on-prem Grafana instances to Grafana Cloud.",
-			Stage:       FeatureStageExperimental,
+			Description: "Enable the Grafana Migration Assistant, which helps you easily migrate on-prem dashboards, folders, and data source configurations to your Grafana Cloud stack.",
+			Stage:       FeatureStagePublicPreview,
 			Owner:       grafanaOperatorExperienceSquad,
+			Expression:  "false",
 		},
 		{
 			Name:         "alertingSaveStatePeriodic",
@@ -1070,9 +1061,10 @@ var (
 		{
 			Name:         "groupToNestedTableTransformation",
 			Description:  "Enables the group to nested table transformation",
-			Stage:        FeatureStagePublicPreview,
+			Stage:        FeatureStageGeneralAvailability,
 			FrontendOnly: true,
 			Owner:        grafanaDatavizSquad,
+			Expression:   "true", // enabled by default,
 		},
 		{
 			Name:        "newPDFRendering",
@@ -1081,15 +1073,16 @@ var (
 			Owner:       grafanaSharingSquad,
 		},
 		{
-			Name:         "tlsMemcached",
-			Description:  "Use TLS-enabled memcached in the enterprise caching feature",
-			Stage:        FeatureStageExperimental,
-			Owner:        grafanaOperatorExperienceSquad,
-			HideFromDocs: true,
+			Name:           "tlsMemcached",
+			Description:    "Use TLS-enabled memcached in the enterprise caching feature",
+			Stage:          FeatureStageGeneralAvailability,
+			Owner:          grafanaOperatorExperienceSquad,
+			Expression:     "true",
+			AllowSelfServe: false, // the non-tls implementation is slated for removal
 		},
 		{
 			Name:            "kubernetesAggregator",
-			Description:     "Enable grafana aggregator",
+			Description:     "Enable grafana's embedded kube-aggregator",
 			Stage:           FeatureStageExperimental,
 			Owner:           grafanaAppPlatformSquad,
 			RequiresRestart: true,
@@ -1357,20 +1350,34 @@ var (
 		{
 			Name:              "bodyScrolling",
 			Description:       "Adjusts Page to make body the scrollable element",
-			Stage:             FeatureStageExperimental,
+			Stage:             FeatureStagePublicPreview,
 			Owner:             grafanaFrontendPlatformSquad,
 			Expression:        "false", // enabled by default
 			FrontendOnly:      true,
-			AllowSelfServe:    false,
+			AllowSelfServe:    true,
 			HideFromDocs:      true,
-			HideFromAdminPage: true,
+			HideFromAdminPage: false,
 		},
 		{
 			Name:         "cloudwatchMetricInsightsCrossAccount",
-			Description:  "Enables cross account observability for Cloudwatch Metric Insights",
-			Stage:        FeatureStageExperimental,
+			Description:  "Enables cross account observability for Cloudwatch Metric Insights query builder",
+			Stage:        FeatureStagePublicPreview,
 			Owner:        awsDatasourcesSquad,
 			FrontendOnly: true,
+		},
+		{
+			Name:        "prometheusAzureOverrideAudience",
+			Description: "Deprecated. Allow override default AAD audience for Azure Prometheus endpoint. Enabled by default. This feature should no longer be used and will be removed in the future.",
+			Stage:       FeatureStageDeprecated,
+			Owner:       grafanaPartnerPluginsSquad,
+			Expression:  "true", // Enabled by default for now
+		},
+		{
+			Name:            "dataplaneAggregator",
+			Description:     "Enable grafana dataplane aggregator",
+			Stage:           FeatureStageExperimental,
+			Owner:           grafanaAppPlatformSquad,
+			RequiresRestart: true,
 		},
 	}
 )

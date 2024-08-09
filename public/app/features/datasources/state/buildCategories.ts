@@ -221,6 +221,36 @@ function getEnterprisePhantomPlugins(): DataSourcePluginMeta[] {
       name: 'Azure CosmosDB',
       imgUrl: 'public/img/plugins/azure-cosmosdb.svg',
     }),
+    getPhantomPlugin({
+      id: 'grafana-adobeanalytics-datasource',
+      description: 'Adobe Analytics datasource',
+      name: 'Adobe Analytics',
+      imgUrl: 'public/img/plugins/adobe-analytics.svg',
+    }),
+    getPhantomPlugin({
+      id: 'grafana-cloudflare-datasource',
+      description: 'Cloudflare datasource',
+      name: 'Cloudflare',
+      imgUrl: 'public/img/plugins/cloudflare.jpg',
+    }),
+    getPhantomPlugin({
+      id: 'grafana-cockroachdb-datasource',
+      description: 'CockroachDB datasource',
+      name: 'CockroachDB',
+      imgUrl: 'public/img/plugins/cockroachdb.jpg',
+    }),
+    getPhantomPlugin({
+      id: 'grafana-netlify-datasource',
+      description: 'Netlify datasource',
+      name: 'Netlify',
+      imgUrl: 'public/img/plugins/netlify.svg',
+    }),
+    getPhantomPlugin({
+      id: 'grafana-drone-datasource',
+      description: 'Drone datasource',
+      name: 'Drone',
+      imgUrl: 'public/img/plugins/drone.svg',
+    }),
   ];
 }
 

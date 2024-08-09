@@ -18,7 +18,7 @@ import (
 	"github.com/grafana/grafana/pkg/services/apiserver/standalone"
 )
 
-func newCommandStartExampleAPIServer(o *APIServerOptions, stopCh <-chan struct{}) *cobra.Command {
+func newCommandStartStandaloneAPIServer(o *APIServerOptions, stopCh <-chan struct{}) *cobra.Command {
 	devAcknowledgementNotice := "The apiserver command is in heavy development. The entire setup is subject to change without notice"
 	runtimeConfig := ""
 
@@ -74,18 +74,20 @@ func newCommandStartExampleAPIServer(o *APIServerOptions, stopCh <-chan struct{}
 				return err
 			}
 
-			if o.Options.TracingOptions.TracingService != nil {
-				tracer.InitTracer(o.Options.TracingOptions.TracingService)
-			}
-
+			// o.Config(tracer) definitely needs to happen before we override the tracer below
+			// using tracer.InitTracer with the real tracer
 			config, err := o.Config(tracer)
 			if err != nil {
 				return err
 			}
 
+			if o.Options.TracingOptions.TracingService != nil {
+				tracer.InitTracer(o.Options.TracingOptions.TracingService)
+			}
+
 			defer o.factory.Shutdown()
 
-			if err := o.RunAPIServer(config, stopCh); err != nil {
+			if err := o.RunAPIServer(ctx, config); err != nil {
 				return err
 			}
 
@@ -106,7 +108,7 @@ func RunCLI(opts commands.ServerOptions) int {
 	commands.SetBuildInfo(opts)
 
 	options := newAPIServerOptions(os.Stdout, os.Stderr)
-	cmd := newCommandStartExampleAPIServer(options, stopCh)
+	cmd := newCommandStartStandaloneAPIServer(options, stopCh)
 
 	return cli.Run(cmd)
 }
